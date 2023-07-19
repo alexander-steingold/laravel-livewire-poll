@@ -21,6 +21,7 @@ class CreatePoll extends Component
         'options.*.min' => 'The option must  be at least 3 characters.',
     ];
 
+
     public function render()
     {
         return view('livewire.create-poll');
@@ -44,6 +45,7 @@ class CreatePoll extends Component
 
     public function createPoll()
     {
+        $this->validate();
 //        $poll = Poll::create([
 //            'title' => $this->title,
 //        ]);
@@ -52,9 +54,8 @@ class CreatePoll extends Component
 //            $poll->options()->create(['name' => $option]); //insert to <options> table and associate with poll
 //        }
 
-        // refactoring saving data
-        $this->validate();
-        //  $validatedData = $this->validate();
+        //---------------- refactoring saving data
+
         Poll::create([
             'title' => $this->title,
         ])->options()->createMany( // access to <options> relationship
@@ -64,6 +65,8 @@ class CreatePoll extends Component
         );
 
         $this->reset(['title', 'options']);
+
+        $this->emit('pollCreated');
     }
 //    public function mount()
 //    {
